@@ -1,25 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grades/addStudentPage.dart';
-import 'student.dart';
+import 'test.dart';
 
-class StudentListPage extends StatefulWidget {
+class TestListPage extends StatefulWidget {
   @override
-  _StudentListPageState createState() {
-    return _StudentListPageState();
-  }
+  _TestListPageState createState() => _TestListPageState();
 }
 
-class _StudentListPageState extends State<StudentListPage> {
+class _TestListPageState extends State<TestListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Student List')),
+      appBar: AppBar(title: Text('Test List')),
       body: _buildBody(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddStudentPage()));
+          print('Add Test tapped');
         },
         child: Icon(Icons.add),
       ),
@@ -28,7 +25,7 @@ class _StudentListPageState extends State<StudentListPage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('students').snapshots(),
+      stream: Firestore.instance.collection('tests').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
@@ -45,10 +42,10 @@ class _StudentListPageState extends State<StudentListPage> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final student = Student(data);
+    final test = Test(data);
 
     return Padding(
-      key: ValueKey(student.matricule),
+      key: ValueKey(test.id),
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         decoration: BoxDecoration(
@@ -56,9 +53,9 @@ class _StudentListPageState extends State<StudentListPage> {
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: ListTile(
-          title: Text(student.name),
-          trailing: Text(student.matricule),
-          onTap: () => print(student),
+          title: Text(test.name),
+          trailing: Text(test.formatedDate),
+          onTap: () => print(test),
         ),
       ),
     );

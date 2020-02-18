@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'student.dart';
 
 class AddStudentPage extends StatefulWidget {
   _AddStudentPageState createState() => _AddStudentPageState();
@@ -20,23 +19,25 @@ class _AddStudentPageState extends State<AddStudentPage> {
     super.dispose();
   }
 
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Student"),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Column(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                  child: Column(
                 children: <Widget>[
                   TextFormField(
                     controller: _matriculeController,
                     decoration: const InputDecoration(
-                      hintText: 'Matricule',
+                      labelText: 'Matricule',
+                      hintText: '123456',
                     ),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -48,7 +49,8 @@ class _AddStudentPageState extends State<AddStudentPage> {
                   TextFormField(
                     controller: _firstnameController,
                     decoration: const InputDecoration(
-                      hintText: 'Firstname',
+                      labelText: 'Firstname',
+                      hintText: 'John',
                     ),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -60,7 +62,8 @@ class _AddStudentPageState extends State<AddStudentPage> {
                   TextFormField(
                     controller: _lastnameController,
                     decoration: const InputDecoration(
-                      hintText: 'Lastname',
+                      labelText: 'Lastname',
+                      hintText: 'Connor',
                     ),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -70,38 +73,41 @@ class _AddStudentPageState extends State<AddStudentPage> {
                     },
                   ),
                 ],
-              )
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("Cancel"),
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    var student = {
-                      'firstname': _firstnameController.text,
-                      'lastname': _lastnameController.text
-                    };
-
-                    var matricule = _matriculeController.text;
-
-                    if (_formKey.currentState.validate()) {
-                      Firestore.instance.collection('students').document(matricule).setData(student);
+              )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () {
                       Navigator.pop(context);
-                    }
-                  },
-                  child: Text("Add"),
-                )
-              ],
-            )
-          ]
-        )
-      )
+                    },
+                    child: Text("Cancel"),
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      var student = {
+                        'firstname': _firstnameController.text,
+                        'lastname': _lastnameController.text
+                      };
+
+                      var matricule = _matriculeController.text;
+
+                      if (_formKey.currentState.validate()) {
+                        Firestore.instance
+                            .collection('students')
+                            .document(matricule)
+                            .setData(student);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text("Add"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
